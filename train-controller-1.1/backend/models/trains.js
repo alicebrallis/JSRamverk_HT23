@@ -19,7 +19,16 @@ async function fetchTrainPositions(io) {
         }
     )
     const result = await response.json()
-    const sseurl = result.RESPONSE.RESULT[0].INFO.SSEURL
+
+
+    if (result.RESPONSE && result.RESPONSE.RESULT && result.RESPONSE.RESULT[0] && result.RESPONSE.RESULT[0].INFO && result.RESPONSE.RESULT[0].INFO.SSEURL) {
+        const sseurl = result.RESPONSE.RESULT[0].INFO.SSEURL;
+    } else {
+        console.log(result);
+        console.error('Inget giltigt SSEURL hittades i API-svaret.');
+    }
+
+    
 
     const eventSource = new EventSource(sseurl)
 
