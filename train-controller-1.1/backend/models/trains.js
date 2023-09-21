@@ -1,8 +1,8 @@
 const fetch = require('node-fetch')
 const EventSource = require('eventsource')
 
-async function fetchTrainPositions(io) {
 
+async function fetchTrainPositions(io) {
 
     const query = `<REQUEST>
     <LOGIN authenticationkey="${process.env.TRAFIKVERKET_API_KEY}" />
@@ -20,15 +20,7 @@ async function fetchTrainPositions(io) {
     )
     const result = await response.json()
 
-
-    if (result.RESPONSE && result.RESPONSE.RESULT && result.RESPONSE.RESULT[0] && result.RESPONSE.RESULT[0].INFO && result.RESPONSE.RESULT[0].INFO.SSEURL) {
-        const sseurl = result.RESPONSE.RESULT[0].INFO.SSEURL;
-    } else {
-        console.log(result);
-        console.error('Inget giltigt SSEURL hittades i API-svaret.');
-    }
-
-    
+    const sseurl = result.RESPONSE.RESULT[0].INFO.SSEURL
 
     const eventSource = new EventSource(sseurl)
 
