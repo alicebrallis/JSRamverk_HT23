@@ -163,8 +163,9 @@ app.use((err, req, res, next) => {
 });
 
 
-httpServer.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+const server = app.listen(port, ()=> {
+  console.log("auth api listening on port ", port)
+});
 
+module.exports = server;
 fetchTrainPositions(io);

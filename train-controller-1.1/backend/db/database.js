@@ -1,5 +1,5 @@
-const sqlite3 = require('sqlite3').verbose();
-const { open } = require('sqlite');
+/* const sqlite3 = require('sqlite3').verbose();
+const { open } = require('sqlite'); */
 //let dsn = "mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@cluster0.ywmqh1p.mongodb.net/?retryWrites=true&w=majority"
 //let dsn = `mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@cluster0.hkfbt.mongodb.net/folinodocs?retryWrites=true&w=majority`;
 /* 
@@ -22,7 +22,7 @@ module.exports = database;
  */
 
 const mongo = require("mongodb").MongoClient;
-const collectionName = "keys";
+const collectionName = "tickets";
 
 const database = {
     openDb: async function openDb() {
