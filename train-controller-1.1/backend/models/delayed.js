@@ -43,6 +43,7 @@ const delayed = {
                 return res.json({
                     data: result.RESPONSE.RESULT[0].TrainAnnouncement
                 });
+               
             })
     }
 };

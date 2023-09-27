@@ -1,22 +1,28 @@
 const database = require('../db/database.js');
+//const ticket_router = require('../routes/tickets.js');
 
 const tickets = {
     getTickets: async function getTickets(req, res){
         try {
             const { collection } = await database.openDb();
 
+        //     // Hämta alla dokument från "tickets" collection
+            const allTickets = await collection
+            .find({})
+            .sort({ ROWID: -1 }) // Sortera efter ROWID i fallande ordning
+            .toArray();
 
-            // Hämta alla dokument från "tickets" collection
-            const allTickets = await collection.find({}).toArray();
-            console.log(allTickets, "allTickets")
+            //console.log(allTickets, "allTickets")
 
-            if (allTickets.length === 0) {
+        /*if (allTickets.length === 0) {
                 console.log('Inga biljetter hittades i "tickets" collection.');
             } else {
                 console.log(`Hittade ${allTickets.length} biljetter i "tickets" collection.`);
-            }
-            
-            return res.json({
+            } */
+
+        //await database.closeDb()
+
+        return res.json({
                 data: allTickets
             });
         } catch (error) {
@@ -26,20 +32,22 @@ const tickets = {
         }
     },
     createTicket: async function createTicket(req, res){
-        var db = await database.openDb();
+        //console.log(res.body)
+        const { collection } = await database.openDb();
 
-        const result = await db.run(
-            'INSERT INTO tickets (code, trainnumber, traindate) VALUES (?, ?, ?)',
-            req.body.code,
-            req.body.trainnumber,
-            req.body.traindate,
-        );
+        const result = await collection.insertOne({
+            //id_: req.body._id,
+            code: req.body.code,
+            trainnumber: req.body.trainnumber,
+            traindate: req.body.traindate
+        });
 
-        await db.close();
+        //await database.closeDb()
+        console.log(result, "result")
 
         return res.json({
             data: {
-                id: result.lastID,
+                //id: result._id,
                 code: req.body.code,
                 trainnumber: req.body.trainnumber,
                 traindate: req.body.traindate,
