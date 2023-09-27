@@ -2,22 +2,8 @@ const database = require('../db/database.js');
 
 const tickets = {
     getTickets: async function getTickets(req, res){
-<<<<<<< HEAD
-        var db = await database.openDb();
-
-        var allTickets = await db.all(`SELECT *, ROWID as id FROM tickets ORDER BY ROWID DESC`);
-
-        await db.close();
-
-        return res.json({
-            data: allTickets
-        });
-    },
-
-=======
         try {
             const { collection } = await database.openDb();
-
 
 
             // Hämta alla dokument från "tickets" collection
@@ -39,7 +25,6 @@ const tickets = {
             return res.status(500).json({ error: 'Ett fel uppstod vid hämtning av biljetter.' });
         }
     },
->>>>>>> 3d56e3b (.)
     createTicket: async function createTicket(req, res){
         var db = await database.openDb();
 
