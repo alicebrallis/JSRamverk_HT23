@@ -22,6 +22,8 @@ const tickets = {
 
         //await database.closeDb()
 
+        console.log(allTickets, "alltickets")
+
         return res.json({
                 data: allTickets
             });
@@ -32,28 +34,35 @@ const tickets = {
         }
     },
     createTicket: async function createTicket(req, res){
-        //console.log(res.body)
         const { collection } = await database.openDb();
 
+        console.log(req.body.code, req.body.trainnumber, req.body.traindate)
+
         const result = await collection.insertOne({
-            //id_: req.body._id,
             code: req.body.code,
             trainnumber: req.body.trainnumber,
             traindate: req.body.traindate
         });
 
-        //await database.closeDb()
-        console.log(result, "result")
+        //let parse_id = JSON.stringify(result.insertedId)
+        //let newId = JSON.parse(parse_id)
+
+
+        // Använd insertedId för att få det unika _id som genererats av MongoDB
+        const insertedData = {
+            _id: result.insertedId.toString(), // Använd insertedId för att få det unika _id
+            code: req.body.code,
+            trainnumber: req.body.trainnumber,
+            traindate: req.body.traindate,
+        };
+
+        console.log(insertedData, "insertedData")
 
         return res.json({
-            data: {
-                //id: result._id,
-                code: req.body.code,
-                trainnumber: req.body.trainnumber,
-                traindate: req.body.traindate,
-            }
+            data: insertedData
         });
-    }
+        }
 };
+
 
 module.exports = tickets;
