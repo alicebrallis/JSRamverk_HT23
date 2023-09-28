@@ -2,7 +2,7 @@ require('dotenv').config()
 const bodyParser = require('body-parser')
 
 
-// app.use(express.json());
+
 
 const express = require("express");
 const cors = require('cors');
@@ -14,16 +14,17 @@ const delayed = require('./routes/delayed.js');
 const tickets = require('./routes/tickets.js');
 const codes = require('./routes/codes.js');
 const hello = require('./routes/hello');
+
 const app = express()
 const httpServer = require("http").createServer(app);
 const db =  require('./db/database.js');
-const databas = db.openDb()
 
-const currentDatabaseName = databas.databaseName;
-
-console.log(currentDatabaseName);
+// const databas = db.openDb()
+// const currentDatabaseName = databas.databaseName;
+// console.log(currentDatabaseName);
 
 app.use(cors());
+app.use(express.json()); //Felet uppstod med "undefinied req.body var för att vi hade kommenterat ut denna, om vi vill använda oss av req.body måste vi inkludera denna express.json för att tolka JSON-data i inkommande förfrågningar"
 app.options('*', cors());
 
 app.disable('x-powered-by');
@@ -36,8 +37,6 @@ const io = require("socket.io")(httpServer, {
 });
 
 const port = process.env.PORT || 1337;
-
-app.use(cors());
 
 // don't show the log when it is test
 if (process.env.NODE_ENV !== 'test') {
@@ -164,7 +163,7 @@ app.use((err, req, res, next) => {
 
 
 const server = app.listen(port, ()=> {
-  console.log("auth api listening on port ", port)
+    console.log("auth api listening on port ", port)
 });
 
 module.exports = server;
