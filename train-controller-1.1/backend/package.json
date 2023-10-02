@@ -5,9 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text --reporter=clover mocha --timeout 10000",
+    "posttest": "npm run eslint",
     "start": "node app.js",
     "watch": "nodemon app.js",
-    "production": "NODE_ENV='production' node app.js"
+    "production": "NODE_ENV='production' node app.js",
+    "eslint": "eslint ."
   },
   "keywords": [],
   "author": "",
@@ -28,6 +30,9 @@
   "devDependencies": {
     "chai": "^4.3.10",
     "chai-http": "^4.4.0",
+    "eslint": "^8.50.0",
+    "eslint-plugin-react": "^7.33.2",
+    "javascript-style-guide": "^1.0.1",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0"
   }

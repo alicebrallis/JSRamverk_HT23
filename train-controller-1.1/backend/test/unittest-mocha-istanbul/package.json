@@ -1,0 +1,15 @@
+{
+  "name": "unittest-mocha-istanbul",
+  "version": "1.0.0",
+  "description": "\"test\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0"
+  }
+}
