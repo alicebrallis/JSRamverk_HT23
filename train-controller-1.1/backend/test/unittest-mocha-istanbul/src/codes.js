@@ -1,5 +1,5 @@
 const fetch = require('node-fetch')
-const database = require('../db/database.js');
+const database = require('../../../../backend/db/database.js');
 
 const codes = {
     getCodes: async function getCodes(req, res){
