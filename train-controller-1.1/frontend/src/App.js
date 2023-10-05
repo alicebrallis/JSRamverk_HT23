@@ -1,13 +1,18 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
+//import RenderMainView from './Main.js';
+
 
 function App() {
   return (
     <div className="App">
+           {/* 
       <header className="App-header">
+        <div className="container">  
+        </div>  
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Hello <code>src/App.js</code> and save to reload.
+          Hey <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"
@@ -17,9 +22,11 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+      </header> 
+      */}
     </div>
   );
 }
 
 export default App;
+
