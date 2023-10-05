@@ -23,18 +23,25 @@ const db =  require('./db/database.js');
 // const currentDatabaseName = databas.databaseName;
 // console.log(currentDatabaseName);
 
-app.use(cors());
+
 app.use(express.json()); //Felet uppstod med "undefinied req.body var för att vi hade kommenterat ut denna, om vi vill använda oss av req.body måste vi inkludera denna express.json för att tolka JSON-data i inkommande förfrågningar"
 app.options('*', cors());
 
 app.disable('x-powered-by');
 
+app.use(cors()); // Enable CORS for Express routes
+
+
 const io = require("socket.io")(httpServer, {
-  cors: {
-    origin: "http://localhost:9000",
-    methods: ["GET", "POST"]
-  }
-});
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+    },
+  });
+
+  
+app.use(cors({ origin: 'http://localhost:3000' }));
+
 
 const port = process.env.PORT || 1337;
 
@@ -54,6 +61,11 @@ app.use((req, res, next) => {
 });
 
 
+app.get("/", (req, res) => {
+    // Define the response for the root URL
+    res.json({ message: "Welcome to the server!" });
+  });
+  
 // Add a route - uses send
 // app.get("/", (req, res) => {
 //     res.send("Hello World");
@@ -162,7 +174,7 @@ app.use((err, req, res, next) => {
 });
 
 
-const server = app.listen(port, ()=> {
+const server = httpServer.listen(port, ()=> {
     console.log("auth api listening on port ", port)
 });
 
