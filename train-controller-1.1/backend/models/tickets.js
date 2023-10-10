@@ -1,39 +1,68 @@
 const database = require('../db/database.js');
+//const ticket_router = require('../routes/tickets.js');
 
 const tickets = {
     getTickets: async function getTickets(req, res){
-        var db = await database.openDb();
+        try {
+            const { collection } = await database.openDb();
+            //await database.resetCollection();
 
-        var allTickets = await db.all(`SELECT *, ROWID as id FROM tickets ORDER BY ROWID DESC`);
+        //     // Hämta alla dokument från "tickets" collection
+            const allTickets = await collection
+            .find({})
+            .sort({ ROWID: -1 }) // Sortera efter ROWID i fallande ordning
+            .toArray();
 
-        await db.close();
+            //console.log(allTickets, "allTickets")
+
+        /*if (allTickets.length === 0) {
+                console.log('Inga biljetter hittades i "tickets" collection.');
+            } else {
+                console.log(`Hittade ${allTickets.length} biljetter i "tickets" collection.`);
+            } */
+
+        //await database.closeDb()
+
+        //console.log(allTickets, "alltickets")
 
         return res.json({
-            data: allTickets
-        });
+                data: allTickets
+            });
+        } catch (error) {
+            // Hantera eventuella fel här
+            console.error('Fel vid hämtning av biljetter:', error);
+            return res.status(500).json({ error: 'Ett fel uppstod vid hämtning av biljetter.' });
+        }
     },
-
     createTicket: async function createTicket(req, res){
-        var db = await database.openDb();
+        const { collection } = await database.openDb();
 
-        const result = await db.run(
-            'INSERT INTO tickets (code, trainnumber, traindate) VALUES (?, ?, ?)',
-            req.body.code,
-            req.body.trainnumber,
-            req.body.traindate,
-        );
+        //console.log(req.body.code, req.body.trainnumber, req.body.traindate)
 
-        await db.close();
+        const result = await collection.insertOne({
+            code: req.body.code,
+            trainnumber: req.body.trainnumber,
+            traindate: req.body.traindate
+        });
+
+        //let parse_id = JSON.stringify(result.insertedId)
+        //let newId = JSON.parse(parse_id)
+
+
+        // Använd insertedId för att få det unika _id som genererats av MongoDB
+        const insertedData = {
+            _id: result.insertedId.toString(), // Använd insertedId för att få det unika _id
+            code: req.body.code,
+            trainnumber: req.body.trainnumber,
+            traindate: req.body.traindate,
+        };
+
+        //console.log(insertedData, "insertedData")
 
         return res.json({
-            data: {
-                id: result.lastID,
-                code: req.body.code,
-                trainnumber: req.body.trainnumber,
-                traindate: req.body.traindate,
-            }
+            data: insertedData
         });
-    }
+        }
 };
 
 module.exports = tickets;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import L from 'leaflet';
-import io from "socket.io-client";
 import 'leaflet/dist/leaflet.css';
 import './Main.css';
 import { socket } from "./socket.js";
@@ -60,6 +59,7 @@ function MainView() {
           try {
             if(!mapInitialized) {
               if (markers.hasOwnProperty(data.trainnumber)) {
+                console.log(markers, "markers")
                 let marker = markers[data.trainnumber];
                 marker.setLatLng(data.position);
               } else {
