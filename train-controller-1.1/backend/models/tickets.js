@@ -5,6 +5,7 @@ const tickets = {
     getTickets: async function getTickets(req, res){
         try {
             const { collection } = await database.openDb();
+            //await database.resetCollection();
 
         //     // Hämta alla dokument från "tickets" collection
             const allTickets = await collection
@@ -22,7 +23,7 @@ const tickets = {
 
         //await database.closeDb()
 
-        console.log(allTickets, "alltickets")
+        //console.log(allTickets, "alltickets")
 
         return res.json({
                 data: allTickets
@@ -36,7 +37,7 @@ const tickets = {
     createTicket: async function createTicket(req, res){
         const { collection } = await database.openDb();
 
-        console.log(req.body.code, req.body.trainnumber, req.body.traindate)
+        //console.log(req.body.code, req.body.trainnumber, req.body.traindate)
 
         const result = await collection.insertOne({
             code: req.body.code,
@@ -56,13 +57,12 @@ const tickets = {
             traindate: req.body.traindate,
         };
 
-        console.log(insertedData, "insertedData")
+        //console.log(insertedData, "insertedData")
 
         return res.json({
             data: insertedData
         });
         }
 };
-
 
 module.exports = tickets;
