@@ -1,0 +1,16 @@
+{
+  "name": "unittest-mocha-istanbul",
+  "version": "1.0.0",
+  "description": "\"test\"",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0"
+  }
+}
