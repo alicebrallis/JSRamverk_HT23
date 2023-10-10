@@ -13,7 +13,8 @@ const fetchTrainPositions = require('./models/trains.js')
 const delayed = require('./routes/delayed.js');
 const tickets = require('./routes/tickets.js');
 const codes = require('./routes/codes.js');
-const hello = require('./routes/hello');
+const trains = require('./routes/trains.js');
+
 
 const app = express()
 const httpServer = require("http").createServer(app);
@@ -32,15 +33,34 @@ app.disable('x-powered-by');
 app.use(cors()); // Enable CORS for Express routes
 
 
+//const io = socketIo(server);
+
+
 const io = require("socket.io")(httpServer, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: "http://localhost:3000", 
       methods: ["GET", "POST"],
     },
   });
 
+/* io.sockets.on('connection', function(socket) {
+    //console.log(socket.id); // Nått lång och slumpat
+});
+
+io.emit("message", "Detta är ett meddelande från servern.");
+ */
+
+/* io.on('connection', (socket) => {
+    console.log(`Klient ansluten: ${socket.id}`);
   
-app.use(cors({ origin: 'http://localhost:3000' }));
+    // Skicka ett meddelande till klienten
+
+
+    socket.emit('message', fetchTrainPositions(io))
+});
+
+ */
+  app.use(cors({ origin: 'http://localhost:3000' }));
 
 
 const port = process.env.PORT || 1337;
@@ -144,7 +164,11 @@ app.get('/', (req, res) => {
 
 app.use("/delayed", delayed);
 app.use("/tickets", tickets);
+app.use("/tickets", tickets);
 app.use("/codes", codes);
+app.use("/trains", trains);
+
+
 /* app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
  */
@@ -174,8 +198,10 @@ app.use((err, req, res, next) => {
 });
 
 
+
 const server = httpServer.listen(port, ()=> {
     console.log("auth api listening on port ", port)
 });
 
+fetchTrainPositions(io);
 module.exports = server;
