@@ -1,32 +1,21 @@
-//import logo from './logo.svg';
-import './App.css';
-//import RenderMainView from './Main.js';
-
+import React, { useEffect } from 'react';
+import io from 'socket.io-client';
 
 function App() {
+  useEffect(() => {
+    const socket = io('http://localhost:3000'); // Anslut till din server
+
+    // Lyssna på meddelanden från servern
+    socket.on('message', (message) => {
+      console.log(`Meddelande från servern: ${message}`);
+    });
+  }, []);
+
   return (
     <div className="App">
-           {/* 
-      <header className="App-header">
-        <div className="container">  
-        </div>  
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hey <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> 
-      */}
+      {/* Din React-kod här */}
     </div>
   );
 }
 
 export default App;
-
