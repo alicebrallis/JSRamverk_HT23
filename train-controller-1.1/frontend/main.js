@@ -23,9 +23,12 @@ function renderMainView() {
 
     let markers = {};
 
+
     socket.on("message", (data) => {
         if (markers.hasOwnProperty(data.trainnumber)) {
             let marker = markers[data.trainnumber]
+            console.log(markers, "markers")
+            console.log(data.trainnumber, "data.trainnumber")
 
             marker.setLatLng(data.position);
         } else {
