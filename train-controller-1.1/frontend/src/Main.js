@@ -3,11 +3,15 @@ import L from 'leaflet';
 import io from "socket.io-client";
 import 'leaflet/dist/leaflet.css';
 import './Main.css';
+import { socket } from "./socket.js";
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import blueMarkerIcon from "./blue-marker-icon.png";
+
 
 function MainView() {
   const [delayedTrains, setDelayedTrains] = useState({ data: [] });
   const [mapInitialized, setMapInitialized] = useState(false);
-  const [showTicketView, setTicketView] = useState(false);
+  const [ticketView, setTicketView] = useState(false);
   const [selectedTrain, setSelectedTrain] = useState(null);
   const [lastId, setLastId] = useState(0);
   const [newTicketId, setNewTicketId] = useState(0);
@@ -18,46 +22,65 @@ function MainView() {
   const [codeOptions, setCodeOptions] = useState([]);
   const [showDelayedTrains, setShowDelayedTrains] = useState(true);
   const [newTicket, setNewTicket] = useState(null); // Deklarera newTicket och setNewTicket
+  const [ticketList, setTicketList] = useState([]);
+  const [markers, setMarkers] = useState([])
+  
+  let map;
 
-
-  const socket = io("http://localhost:1337");
-
-  const handleReturn = () => {
-    setTicketView(true);
-    setMapInitialized(true);
-  };
-
-  const initializeMap = () => {
-    var container = L.DomUtil.get("map");
-
-    if (container != null) {
-      container._leaflet_id = null;
-      const map = L.map('map').setView([62.173276, 14.942265], 5);
-
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      }).addTo(map);
-
-      setMapInitialized(true);
-
-      const markers = {};
-
-      socket.on("message", (data) => {
-        if (markers.hasOwnProperty(data.trainnumber)) {
-          let marker = markers[data.trainnumber];
-          marker.setLatLng(data.position);
-        } else {
-          let marker = L.marker(data.position).bindPopup(data.trainnumber).addTo(map);
-          markers[data.trainnumber] = marker;
-        }
-      });
+  
+  
+  useEffect(() => { //NU använder vi en useeffect() för kartan och markörerna, inte varsin för båda som innan
+    const container = L.DomUtil.get("map");
+  
+    if (!mapInitialized) { //Här kollar vi ifall !!mapInitialized är inte satt i så fall: false. Då ritas kartan ut. 
+      if (container != null) {
+        container._leaflet_id = null;
+        map = L.map('map').setView([62.173276, 14.942265], 5);
+  
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+      }
+    } else { //Här kollar vi ifall mapInitialized är satt i så fall: true och då sätter vi den till false igen så att kartvyn ritas. 
+        setMapInitialized(false); 
     }
-  };
+
+    // Här ritar vi ut våra kartmarkörer
+        const markers = {};
+
+        const blueIcon = new L.Icon({
+          iconSize: [25, 41], // Storlek på ikonen i pixlar
+          iconAnchor: [12, 41], // Position där markören ska anslutas till kartan
+          popupAnchor: [1, -34], // Positionen för popupen i förhållande till ikonen
+          iconUrl: blueMarkerIcon // Vägen till din anpassade blå ikon
+        });
+      
+        socket.on("message", (data) => {
+          try {
+            if(!mapInitialized) {
+              if (markers.hasOwnProperty(data.trainnumber)) {
+                let marker = markers[data.trainnumber];
+                marker.setLatLng(data.position);
+              } else {
+                let marker = L.marker(data.position, { icon: blueIcon }).bindPopup(data.trainnumber).addTo(map);
+                markers[data.trainnumber] = marker;
+              }
+            }
+          } catch (error) {
+            console.error("Error handling 'message' event:", error);
+          }
+        });
+      },[mapInitialized, map]);
+  
+    //handleReturn triggas när vi klickar på tillbaka knappen i delayed vyn och då ska den återskapa vyn för listan över tågförseningarna och kartvyn
+      const handleReturn = () => {
+        setTicketView(true);
+        setMapInitialized(true) //Här sätter vi setMapInitialized till true så att vi vet att den redan blivit satt en gång innan, och vi kan testa den i vår if else sats i useffect()
+      };
 
   useEffect(() => {
-    initializeMap();
-
+    //initializeMap();
     // Fetchar från alla HTTP förfrågningar
     Promise.all([ //använder promise.all för att pararellt köra flera asykrona förfrågningar samtidigt och vänta på att 
     // alla ska slutföras innan vi går vidare. Inuti Promise.all passerar vi en array av promises(det är vad fetch returnerar)
@@ -117,14 +140,12 @@ function MainView() {
       });
   }, []);
 
+  //
+  // DETTA ÄR VYN MED TABELLEN PÅ FÖRSENADE TÅG, STARTVYN
+  //
   const renderDelayedTable = (data) => {
-/* 
-    if (!showDelayedTrains) {
-      // If showDelayedTrains is false (i.e., handleTrainClick is clicked), return null to hide the content.
-      return null;
-    } */
-  
     return (
+      <div>
       <div className="delayed-trains">
         {data.map((item, index) => (
           <div key={index} className="train-item" onClick={() => handleTrainClick(item)}>
@@ -136,13 +157,18 @@ function MainView() {
                 {item.ToLocation ? item.ToLocation[0].LocationName : ""}
               </div>
             </div>
-            <div className="delay">{outputDelay(item)}</div>
-          </div>
+          <div className="delay">{outputDelay(item)}</div>
+        </div>
         ))}
+      </div>
+      <div className='mapContainer'>
+      <div id="map" className="map"></div>
+      </div>
       </div>
     );
   };
 
+// BERÄKNAR FÖRSENINGEN I 
   const outputDelay = (item) => {
     let advertised = new Date(item.AdvertisedTimeAtLocation);
     let estimated = new Date(item.EstimatedTimeAtLocation);
@@ -162,11 +188,14 @@ function MainView() {
     setTicketView(false);
   };
 
+
+  //
+  // DETTA ÄR VYN MED ÄRENDEN
+  //
   const renderTicketView = (item) => {
+    //console.log(L.DomUtil.get("map"), "container i ticketview");
+
     let locationString = "";
-    const handleBackClick = () => {
-      setIsBackClicked(true);
-    };
 
     const handleFormSubmit = (event) => {
       event.preventDefault();
@@ -178,6 +207,8 @@ function MainView() {
       };
 
       console.log(newTicket, "newTicket")
+      //console.log(L.DomUtil.get("map"), "container i ticketview");
+
 
       fetch("http://localhost:1337/tickets", {
         body: JSON.stringify(newTicket),
@@ -188,75 +219,94 @@ function MainView() {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log(result.data, "result") 
-          setNewTicket(result.data) //Här skapas ett nytt ärende omvandlat till JSON-data
+          console.log(result.data, "result")
+          const newTicketData = result.data
+          setTicketList([...ticketList, newTicketData]);
+          //setTicketList([...ticketList, newTicketData]); //Här skapas ett nytt ärende omvandlat till JSON-data
         });
         
     };
-  
-    return (
+
+    return ( //Denna komponent hanterar biljettvyn, vad som ska visas på denna sida, data från localhost:1337/codes ska visas här. 
       <div className="ticket-container">
         <div className="ticket">
-          <a href="Gå tillbaka" onClick={handleBackClick} id="back"></a>
+        <button onClick={handleReturn}>Tillbaka</button>
           <h1>Nytt ärende #{newTicketId}</h1>
           {locationString && <h3>{locationString}</h3>}
           <p><strong>Försenad:</strong> {outputDelay(item)}</p>
           <form onSubmit={handleFormSubmit} id="new-ticket-form">
             <label>Orsakskod</label><br />
             <select value={selectedCode} onChange={(e) => setSelectedCode(e.target.value)} id="reason-code">
-  {codeOptions.map((value) => (
-    <option key={value} value={value}>
-      {value}
-    </option>
+      {codeOptions.map((value) => (
+        <option key={value} value={value}>
+          {value}
+        </option>
+      ))}
+    </select>
+    <br /><br />
+                <input type="submit" value="Skapa nytt ärende" />
+              </form>
+            </div>
+            <br />
+            <div className="old-tickets" id="old-tickets">
+      <h2>Befintliga ärenden</h2>
+      {oldTickets}
+      {ticketList.map((ticket) => (
+        <div key={ticket._id} className="ticket-item">
+          {ticket._id} - {ticket.code} - {ticket.trainnumber} - {ticket.traindate}
+        </div>
   ))}
-</select>
-<br /><br />
-            <input type="submit" value="Skapa nytt ärende" />
-          </form>
-        </div>
-        <br />
-        <div className="old-tickets" id="old-tickets">
-          <h2>Befintliga ärenden</h2>
-          {oldTickets}
-          {newTicket && (
-  <div className="new-ticket">
-    {newTicket._id} - {newTicket.code} - {newTicket.trainnumber} - {newTicket.traindate}
-  </div>
-)}
-        </div>
+</div>
+
       </div>
     );
   };
+
 
   const clearContainer = () => {
     setSelectedTrain(null);
   };
 
-  return (
-    <div>
-      <div className="ticket-view">
-        {selectedTrain && !showTicketView ? (
-          <div>
-            <button onClick={handleReturn}>Tillbaka</button>
-            {renderTicketView(selectedTrain)}
-          </div>
-        ) : (
-          <div className="delayed">
-            <h1>Försenade tåg</h1>
-            {renderDelayedTable(delayedTrains.data)}
-          </div>
-        )}
-      </div>
+  // return (
+  //   <div>
+  //     <div className="ticket-view"> 
+  //       {selectedTrain && ticketView === false ? (
+  //         <div>
+  //           {renderTicketView(selectedTrain)}
+  //         </div>
+  //       ) : null}
+  //     </div>
+    
+  //     {!selectedTrain || ticketView === true ? (
+  //       <div>
+  //         <div className="delayed">
+  //           <h1>Försenade tåg</h1>
+  //           {renderDelayedTable(delayedTrains.data)}
+  //         </div>
+  //       </div>
+  //     ) : null}
 
-      <div>
+  //   </div>
+  // );
+
+  // RETURN FÖR HELA FUNKTIONEN MAINVIEW
+  return (
+    <div className="ticket-view">
+      {selectedTrain && ticketView === false ? (
+        <div>
+          {renderTicketView(selectedTrain)}
+        </div>
+      ) : (
+        <div className="delayed">
+          <h1>Försenade tåg</h1>
+          {renderDelayedTable(delayedTrains.data)}
+        </div>
+      )}
       
-        <div id="map" className="map"></div>
-      </div>
     </div>
   );
-}
 
-
+      } 
 export default MainView;
 
 
