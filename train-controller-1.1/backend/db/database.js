@@ -48,7 +48,27 @@ const database = {
             collection: collection,
             client: client,
         };
-    }
-};
+    },
+/*     resetCollection: async function resetCollection() {
+        const { db, client, collection } = await database.openDb();
+        
+        try {
+            const collections = await db.listCollections().toArray();
+            const collectionNames = collections.map(col => col.name);
+            
+            if (collectionNames.includes(collectionName)) {
+                await collection.deleteMany({});
+                console.log(`Collection '${collectionName}' reset successfully.`);
+            } else {
+                console.log(`Collection '${collectionName}' does not exist.`);
+            }
+        } catch (error) {
+            console.error(`Error resetting collection '${collectionName}': ${error}`);
+        } finally {
+            await client.close();
+        }
+    } */
+    
+}
 
 module.exports = database;
