@@ -76,7 +76,7 @@ function MainView() {
     //handleReturn triggas när vi klickar på tillbaka knappen i delayed vyn och då ska den återskapa vyn för listan över tågförseningarna och kartvyn
       const handleReturn = () => {
         setTicketView(true);
-        setMapInitialized(true) //Här sätter vi setMapInitialized till true så att vi vet att den redan blivit satt en gång innan, och vi kan testa den i vår if else sats i useffect()
+        setMapInitialized(true); //Här sätter vi setMapInitialized till true så att vi vet att den redan blivit satt en gång innan, och vi kan testa den i vår if else sats i useffect()
       };
 
   useEffect(() => {
@@ -104,7 +104,7 @@ function MainView() {
 
         const lastIdFromData = ticketsResult.data[1] ? ticketsResult.data[1]._id : 0; //new ticket id blir inte riktigt rätt här
 
-        setLastId(lastIdFromData) //Sätter last id här, så att det inte kan dupliceras och är unikt för ärendet
+        setLastId(lastIdFromData); //Sätter last id här, så att det inte kan dupliceras och är unikt för ärendet
 
      
         //console.log(ticketsResult.data[1])
@@ -180,7 +180,7 @@ function MainView() {
 
   const handleTrainClick = (item) => { //Denna hanterar när ett tåg har blivit klickat på i listan av försenade tåg
     setSelectedTrain(item); //Skickar item till setSelectedTrain(item), så uppdaterar state variabeln med denna data
-    setTicketView(false) // Sätter setTicketView till false så att denna vy kan återskapas
+    setTicketView(false); // Sätter setTicketView till false så att denna vy kan återskapas
   };
 
   const clearSelectedTrain = () => {
