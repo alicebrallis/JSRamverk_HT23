@@ -34,7 +34,7 @@ jobs:
     - name: Display working directory
       run: echo $PWD
 
-    - run: cd ./JSRamverk_HT23
+    - run: cd /Users/aliceolsson/dbwebb-kurser/JSRamverk_HT23
       working-directory: ${{ github.workspace }}
 
     - run: npm test
