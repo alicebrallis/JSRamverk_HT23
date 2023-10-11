@@ -29,8 +29,13 @@ jobs:
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
 
-    - run: ls /github/workspace
-    - run: cd /github/workspace/JSRamverk_HT23/train-controller-1.1/backend
-    - run: npm install
-    - run: npm test
+    - name: Change directory and list contents
+      run: |
+        cd /github/workspace/JSRamverk_HT23/train-controller-1.1/backend
+        ls
+    - name: Install dependencies
+      run: npm install
+    - name: Run tests
+      run: npm test
+
 
