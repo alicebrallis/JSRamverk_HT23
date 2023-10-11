@@ -32,7 +32,8 @@ jobs:
     - run: npm install
 
     - name: Change working directory
-      run: cd ./JSRamverk_HT23
+      run: cd /Users/aliceolsson/dbwebb-kurser/JSRamverk_HT23/train-controller-1.1/backend/test/unittest-mocha-istanbul/test
       working-directory: ${{ github.workspace }}
 
-    - run: npm test
+    - name: Run backend tests
+      run: npm test
