@@ -22,7 +22,13 @@ const tickets = {
 
         //await database.closeDb()
 
-        console.log(allTickets, "alltickets")
+        //console.log(allTickets, "alltickets")
+
+        if (allTickets.length === 0) {
+            // Om ingen biljett hittades, returnera ett meddelande
+            return res.status(404).json({ error: 'Inga biljetter hittades i "tickets" collection.' });
+        }
+
 
         return res.json({
                 data: allTickets
