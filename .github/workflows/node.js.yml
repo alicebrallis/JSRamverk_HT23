@@ -30,7 +30,7 @@ jobs:
         mongodb-version: ${{ matrix.mongodb-version }}
 
     - name: Change directory and list contents
-      run: ls
+      run: cd ./train-controller-1.1/backend/test
     - name: Install dependencies
       run: npm install
     - name: Run tests
