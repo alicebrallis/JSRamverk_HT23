@@ -24,15 +24,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Start Local MongoDB
+    - name: Set up environment variables
       run: |
-        # Start MongoDB using Docker
-        docker run --name my-mongodb -d -p 27017:27017 mongo
-    
-        # Set environment variables if needed
-        export MONGO_URL="mongodb://localhost:27017/test"
-        export MONGO_USERNAME="aliceolsson96"
-        export MONGO_PASSWORD="Gullberna1"
+        echo "MONGO_URL=mongodb://localhost:27017/test" >> $GITHUB_ENV
+        echo "MONGO_USERNAME=aliceolsson96" >> $GITHUB_ENV
+        echo "MONGO_PASSWORD=Gullberna1" >> $GITHUB_ENV
 
     - name: Change directory and list contents
       run: |
