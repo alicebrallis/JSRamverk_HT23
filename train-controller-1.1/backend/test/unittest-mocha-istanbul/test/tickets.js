@@ -36,10 +36,13 @@ describe('Tickets', function () {
         const req = {};
         const res = {
             json: function (data) {
-                if (data && data.data) {
-                    assert.strictEqual(data.data.length > 0, true);
+                console.log(data, "dataaaa", data.data, "data.data")
+                if (data && data.data && typeof data.data === 'object') {
+                    // Check if data.data is an object (not an array)
+                    console.log(Object.keys(data.data).length, "längd objekt")
+                    assert.strictEqual(Object.keys(data.data).length > 0, true);
                 } else {
-                    // Om data.data är undefined eller om data är undefined
+                    // If data.data is not an object or is undefined
                     assert.fail('Data is missing or empty');
                 }
             },
@@ -50,7 +53,6 @@ describe('Tickets', function () {
 
         await tickets.getTickets(req, res);
     });
-
 
     // Definiera ett nytt testfall
     it('get tickets with error', async function () {

@@ -24,12 +24,8 @@ const tickets = {
 
         //console.log(allTickets, "alltickets")
 
-        if (allTickets.length === 0) {
-            // Om ingen biljett hittades, returnera ett meddelande
-            return res.status(404).json({ error: 'Inga biljetter hittades i "tickets" collection.' });
-        }
 
-
+        console.log(typeof(allTickets))
         return res.json({
                 data: allTickets
             });
