@@ -34,11 +34,13 @@ jobs:
         cd train-controller-1.1/backend
         ls
     - name: Install dependencies
-      working-directory: train-controller-1.1/backend/test/unittest-mocha-istanbul # Set the working directory here
-      run: |
-        npm install
-        npm install -g mocha
+      working-directory: train-controller-1.1/backend # Set the working directory to the project's root
+      run: npm install
+    - name: Install Mocha globally
+      run: npm install -g mocha # You can install Mocha globally if needed
+    - name: Change directory to the test directory
+      working-directory: train-controller-1.1/backend/test/unittest-mocha-istanbul
+      run: npm install # Install test-specific dependencies
     - name: Run tests
-      working-directory: train-controller-1.1/backend/test/unittest-mocha-istanbul/test # Set the working directory here
       run: npm test
 
