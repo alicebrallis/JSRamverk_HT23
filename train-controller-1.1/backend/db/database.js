@@ -32,7 +32,7 @@ const database = {
         let dsn = `mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@cluster0.ywmqh1p.mongodb.net/?retryWrites=true&w=majority`;
 
         if (process.env.NODE_ENV === 'test') { //Kommenterade ut denna helt, så att den använder vår collection tickets och vår dsn. 
-            dsn = "mongodb://root:rootpassword@127.0.0.1:27017/test";
+            dsn = "mongodb://aliceolsson96:Gullberna1@127.0.0.1:27017/test";
         }
         //Ansluter till MongoDB-databasen mha DSN
         const client  = await mongo.connect(dsn, {
