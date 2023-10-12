@@ -18,16 +18,24 @@ describe('Tickets', function () {
     let testDb;
 
     before(async function () {
-        testDb = await database.openDb();
-        console.log(testDb);
+        try {
+            this.timeout(5000); 
+            testDb = await database.openDb();
+        } catch (error) {
+            console.error('Error while opening the database:', error);
+            throw error; // Re-throw the error to fail the test if the database setup fails
+        }
     });
-
+    
     after(async function () {
-        await testDb.client.close();
+        if (testDb) {
+            this.timeout(5000); 
+            await testDb.client.close();
+        }
     });
 
+    
     it('get tickets without error', async function () {
-        this.timeout(5000); // Timeout set to 5 seconds (or your desired value)
 
         const req = {};
         const res = {

@@ -58,7 +58,6 @@ const tickets = {
             traindate: req.body.traindate,
         };
 
-        console.log(insertedData, "insertedData")
 
         return res.json({
             data: insertedData
