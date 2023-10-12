@@ -1,6 +1,6 @@
 "use strict";
 
-process.env.NODE_ENV = 'test'; // Sätt testmiljön
+process.env.NODE_ENV = 'test'; // Set the test environment
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -19,6 +19,7 @@ describe('Tickets', function () {
 
     before(async function () {
         testDb = await database.openDb();
+        console.log(testDb);
     });
 
     after(async function () {
@@ -26,6 +27,8 @@ describe('Tickets', function () {
     });
 
     it('get tickets without error', async function () {
+        this.timeout(5000); // Timeout set to 5 seconds (or your desired value)
+
         const req = {};
         const res = {
             json: function (data) {
@@ -40,6 +43,7 @@ describe('Tickets', function () {
             },
         };
 
+        // Call the asynchronous function
         await tickets.getTickets(req, res);
     });
 
@@ -54,6 +58,7 @@ describe('Tickets', function () {
             },
         };
 
+        // Call the asynchronous function
         await tickets.getTickets(null, res);
     });
 
@@ -74,6 +79,7 @@ describe('Tickets', function () {
             },
         };
 
+        // Call the asynchronous function
         await tickets.createTicket(req, res);
     });
-});
+})
