@@ -24,10 +24,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.7.0
-      with:
-        mongodb-version: ${{ matrix.mongodb-version }}
+    - name: Start Local MongoDB
+      run: |
+        # Start MongoDB using Docker
+        docker run --name my-mongodb -d -p 27017:27017 mongo
+    
+        # Set environment variables if needed
+        export MONGO_URL="mongodb://localhost:27017/test"
+        export MONGO_USERNAME="aliceolsson96"
+        export MONGO_PASSWORD="Gullberna1"
 
     - name: Change directory and list contents
       run: |
