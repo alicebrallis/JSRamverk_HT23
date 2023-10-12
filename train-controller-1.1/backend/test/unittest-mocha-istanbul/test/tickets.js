@@ -34,7 +34,7 @@ describe('Tickets', function () {
 // Uppdatera testfallet "get tickets without error"
     it('get tickets without error', async function () {
         const req = {};
-        const localRes = {
+        const res = {
             json: function (data) {
                 if (data && data.data) {
                     assert.strictEqual(data.data.length > 0, true);
@@ -48,7 +48,7 @@ describe('Tickets', function () {
             },
         };
 
-        await tickets.getTickets(req, localRes);
+        await tickets.getTickets(req, res);
     });
 
 
