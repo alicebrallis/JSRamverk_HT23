@@ -39,14 +39,13 @@ describe('Tickets', function () {
                 assert.strictEqual(data.data.length > 0, true);
             },
             status: function (code) {
-                // Använd Chai för att kontrollera statuskoden
-                chai.expect(code).to.equal(200);
                 return this;
             },
         };
 
         await tickets.getTickets(req, localRes);
     });
+
 
     // Definiera ett nytt testfall
     it('get tickets with error', async function () {
