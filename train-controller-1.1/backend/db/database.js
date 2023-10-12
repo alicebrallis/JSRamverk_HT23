@@ -34,7 +34,6 @@ const database = {
         if (process.env.NODE_ENV === 'test') { //Kommenterade ut denna helt, så att den använder vår collection tickets och vår dsn. 
             dsn = "mongodb://localhost:27017/test";
         }
-
         //Ansluter till MongoDB-databasen mha DSN
         const client  = await mongo.connect(dsn, {
             useNewUrlParser: true,
