@@ -36,7 +36,12 @@ describe('Tickets', function () {
         const req = {};
         const localRes = {
             json: function (data) {
-                assert.strictEqual(data.data.length > 0, true);
+                if (data && data.data) {
+                    assert.strictEqual(data.data.length > 0, true);
+                } else {
+                    // Om data.data är undefined eller om data är undefined
+                    assert.fail('Data is missing or empty');
+                }
             },
             status: function (code) {
                 return this;
