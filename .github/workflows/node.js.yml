@@ -11,6 +11,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+        options: --name my-mongo
+        env:
+          MONGO_INITDB_ROOT_USERNAME: aliceolsson96
+          MONGO_INITDB_ROOT_PASSWORD: Gullberna1
+
+
     strategy:
       matrix:
         node-version: [16.x, 18.x]
@@ -23,12 +34,6 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Set up environment variables
-      run: |
-        echo "MONGO_URL=mongodb://localhost:27017/test" >> $GITHUB_ENV
-        echo "MONGO_USERNAME=aliceolsson96" >> $GITHUB_ENV
-        echo "MONGO_PASSWORD=Gullberna1" >> $GITHUB_ENV
 
     - name: Change directory and list contents
       run: |
