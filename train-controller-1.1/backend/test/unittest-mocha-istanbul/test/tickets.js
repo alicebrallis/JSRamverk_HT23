@@ -30,24 +30,22 @@ const tickets = require("../src/tickets.js");
 // Definiera en testsuite(=grupperar flera testfall) med namn Tickets
 describe('Tickets', function () {
     // Definiera ett testfall med namn inom ''
+   // Uppdatera testfallet "get tickets without error"
+// Uppdatera testfallet "get tickets without error"
     it('get tickets without error', async function () {
-
-        // Skapa ett tomt objekt som represtenterar en HTTP-förfrågan - req
         const req = {};
-
-        // Skapa ett res med två funktioner: json() och status()
-        const res = {
+        const localRes = {
             json: function (data) {
-                // Kontrollera om den är längre än 0, dvs innehåller biljetter
                 assert.strictEqual(data.data.length > 0, true);
             },
             status: function (code) {
-                assert.strictEqual(code, 200);
+                // Använd Chai för att kontrollera statuskoden
+                chai.expect(code).to.equal(200);
                 return this;
             },
         };
 
-        await tickets.getTickets(req, res);
+        await tickets.getTickets(req, localRes);
     });
 
     // Definiera ett nytt testfall
