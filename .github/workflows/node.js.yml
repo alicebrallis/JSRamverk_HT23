@@ -35,6 +35,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Set NODE_ENV to 'test'
+      run: echo "NODE_ENV=test" >> $GITHUB_ENV
+  
     - name: Change directory and list contents
       run: |
         cd train-controller-1.1/backend
