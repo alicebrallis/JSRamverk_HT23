@@ -31,23 +31,15 @@ const database = {
         // en fjärr MongoDB-databas som finns på Atlas
         let dsn = `mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@cluster0.ywmqh1p.mongodb.net/?retryWrites=true&w=majority`;
 
-        console.log("NODE_ENV: ", process.env.NODE_ENV) // <----- HÄR
-
         if (process.env.NODE_ENV === 'test') { //Kommenterade ut denna helt, så att den använder vår collection tickets och vår dsn. 
-            dsn = `mongodb://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@127.0.0.1:27017/test`;
+            dsn = "mongodb://localhost:27017/test";
         }
-
-        console.log("DSN: ", dsn) // <----- HÄR
-
         //Ansluter till MongoDB-databasen mha DSN
         const client  = await mongo.connect(dsn, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
         const db = await client.db();
-
-        console.log("DB: ", db) // <----- HÄR
-
         const collection = await db.collection(collectionName);
 
         return {
