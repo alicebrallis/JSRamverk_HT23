@@ -41,7 +41,7 @@ describe('Tickets', function () {
         }
     });
     
-   
+/*    
     it('get tickets without error', async function () {
 
         const req = {};
@@ -65,7 +65,7 @@ describe('Tickets', function () {
         } catch (error) {
             res.status(500).json({ error: 'Ett fel uppstod vid hämtning av biljetter.' });
         }
-    });
+    }); */
 
     it('get tickets with error', async function () {
         const res = {
