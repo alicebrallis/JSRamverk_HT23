@@ -11,17 +11,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    services:
-      mongodb:
-        image: mongo
-        ports:
-          - 27017:27017
-        options: --name my-mongo
-        env:
-          MONGO_INITDB_ROOT_USERNAME: aliceolsson96
-          MONGO_INITDB_ROOT_PASSWORD: Gullberna1
-
-
     strategy:
       matrix:
         node-version: [16.x, 18.x]
@@ -35,8 +24,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Set NODE_ENV to 'test'
-      run: echo "NODE_ENV=test" >> $GITHUB_ENV
   
     - name: Change directory and list contents
       run: |
@@ -50,4 +37,9 @@ jobs:
     - name: Run tests
       working-directory: train-controller-1.1/backend/test/unittest-mocha-istanbul/test # Set the working directory here
       run: npm test
+    
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.10.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
 
