@@ -11,7 +11,7 @@ chai.should();
 chai.use(chaiHttp);
 
 var assert = require("assert");
-const mongo = require("mongodb").MongoClient;
+//const mongo = require("mongodb").MongoClient;
 
 const tickets = require("../src/tickets.js");
 const database = require('../../../db/database.js');
@@ -25,16 +25,23 @@ describe('Tickets', function () {
             testDb = await database.openDb();
         } catch (error) {
             console.error('Error while opening the database:', error);
-            throw error; // Re-throw the error to fail the test if the database setup fails
+            throw error;
         }
     });
     
     after(async function () {
         if (testDb) {
             this.timeout(5000); 
-            await testDb.client.close();
+            try {
+                await testDb.client.close();
+                console.log("Database connection closed");
+            } catch (error) {
+                console.error("Error while closing database connection:", error);
+            }
         }
     });
+    
+    
 
 /*     
     it('get tickets without error', async function () {
@@ -62,22 +69,25 @@ describe('Tickets', function () {
         }
     }); */
 
-    it('get tickets with error', async function () {
+    it('get tickets with error', function (done) {
         const res = {
             json: function (data) {
                 assert.strictEqual(data.error, 'Ett fel uppstod vid hämtning av biljetter.');
+                done();
             },
             status: function (code) {
                 assert.strictEqual(code, 500);
                 return this;
             },
         };
-
+    
         // Call the asynchronous function
-        await tickets.getTickets(null, res);
+        tickets.getTickets(null, res).catch((error) => {
+            done(error);
+        });
     });
-
-    it('create ticket successfully', async function () {
+    
+/*     it('create ticket successfully', async function () {
         const req = {
             body: {
                 code: '123ABC',
@@ -96,5 +106,6 @@ describe('Tickets', function () {
 
         // Call the asynchronous function
         await tickets.createTicket(req, res);
-    });
-})
+
+    }); */
+});

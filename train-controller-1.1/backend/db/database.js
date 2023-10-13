@@ -35,10 +35,10 @@ const database = {
             dsn = "mongodb://localhost:27017/test";
         }
         //Ansluter till MongoDB-databasen mha DSN
-        const client  = await mongo.connect(dsn, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        const client  = await mongo.connect(dsn)//, {
+            //useNewUrlParser: true,
+            //useUnifiedTopology: true,
+        //});
         const db = await client.db();
         const collection = await db.collection(collectionName);
 
@@ -48,6 +48,7 @@ const database = {
             client: client,
         };
     },
+    
 /*     resetCollection: async function resetCollection() {
         const { db, client, collection } = await database.openDb();
         
