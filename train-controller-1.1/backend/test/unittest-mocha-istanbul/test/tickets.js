@@ -41,9 +41,7 @@ describe('Tickets', function () {
         }
     });
     
-    
-
-/*     
+   
     it('get tickets without error', async function () {
 
         const req = {};
@@ -67,27 +65,26 @@ describe('Tickets', function () {
         } catch (error) {
             res.status(500).json({ error: 'Ett fel uppstod vid hämtning av biljetter.' });
         }
-    }); */
+    });
 
-    it('get tickets with error', function (done) {
+    it('get tickets with error', async function () {
         const res = {
             json: function (data) {
                 assert.strictEqual(data.error, 'Ett fel uppstod vid hämtning av biljetter.');
-                done();
             },
             status: function (code) {
                 assert.strictEqual(code, 500);
                 return this;
             },
         };
-    
+
         // Call the asynchronous function
-        tickets.getTickets(null, res).catch((error) => {
-            done(error);
-        });
+        await tickets.getTickets(null, res);
+        return Promise.resolve();
+        
     });
-    
-/*     it('create ticket successfully', async function () {
+
+  it('create ticket successfully', async function () {
         const req = {
             body: {
                 code: '123ABC',
@@ -107,5 +104,5 @@ describe('Tickets', function () {
         // Call the asynchronous function
         await tickets.createTicket(req, res);
 
-    }); */
+    });
 });
