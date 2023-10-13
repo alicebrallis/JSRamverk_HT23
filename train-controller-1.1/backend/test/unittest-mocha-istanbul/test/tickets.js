@@ -1,6 +1,8 @@
 "use strict";
 
 process.env.NODE_ENV = 'test'; // Set the test environment
+process.env.ATLAS_USERNAME = 'aliceolsson96'
+process.env.ATLAS_PASSWORD = 'Gullberna1'
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
