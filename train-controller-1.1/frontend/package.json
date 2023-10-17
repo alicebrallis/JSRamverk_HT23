@@ -1,11 +1,11 @@
 {
     "name": "frontend",
+    "type": "module",
     "version": "0.1.0",
     "private": true,
     "homepage": ".",
     "dependencies": {
         "@testing-library/jest-dom": "^5.17.0",
-        "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
         "cors": "^2.8.5",
         "express": "^4.18.2",
@@ -14,16 +14,32 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-scripts": "5.0.1",
+        "react-test-renderer": "^18.2.0",
+        "setimmediate": "^1.0.5",
         "socket.io-client": "^4.7.2",
+        "timers": "^0.1.1",
         "web-vitals": "^2.1.4"
     },
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "test": "react-scripts test",
+        "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
         "eject": "react-scripts eject",
         "deploy": "npm run build && rsync -av --delete build/ aloo20@ssh.student.bth.se:www/editor"
-
+    },
+    "jest": {
+        "testEnvironment": "node",
+        "moduleFileExtensions": [
+            "js",
+            "jsx"
+        ],
+        "transform": {
+            "^.+\\.(js|jsx)$": "babel-jest"
+        },
+        "moduleNameMapper": {
+            "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+            "\\.(jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|svg)$": "identity-obj-proxy"
+        }
     },
     "eslintConfig": {
         "extends": [
@@ -42,5 +58,25 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "@babel/core": "^7.23.2",
+        "@babel/node": "^7.22.19",
+        "@babel/plugin-syntax-jsx": "^7.22.5",
+        "@babel/plugin-transform-arrow-functions": "^7.22.5",
+        "@babel/preset-env": "^7.23.2",
+        "@babel/preset-react": "^7.22.15",
+        "@babel/preset-typescript": "^7.23.2",
+        "@testing-library/react": "^14.0.0",
+        "@types/jest": "^29.5.5",
+        "babel-jest": "^29.7.0",
+        "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+        "chai": "^4.3.10",
+        "chai-http": "^4.4.0",
+        "identity-obj-proxy": "^3.0.0",
+        "jest": "^27.5.1",
+        "jsdom": "^22.1.0",
+        "mocha": "^10.2.0",
+        "prettier": "^3.0.3"
     }
 }
