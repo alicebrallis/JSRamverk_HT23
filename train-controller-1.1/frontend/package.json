@@ -28,7 +28,7 @@
         "deploy": "npm run build && rsync -av --delete build/ aloo20@ssh.student.bth.se:www/editor"
     },
     "jest": {
-        "testEnvironment": "node",
+        "testEnvironment": "jsdom",
         "moduleFileExtensions": [
             "js",
             "jsx"
