@@ -22,6 +22,13 @@ h2 {
     margin-bottom: 1.4rem;
 }
 
+h3 {
+    font-size: 1.4rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.2rem;
+}
+
+
 p {
     margin-bottom: 1.4rem;
     font-size: 1rem;
@@ -52,7 +59,7 @@ p {
     height: 100%;
     width: 35%;
     margin-left: 48em;
-    margin-top: 5em;
+    margin-top: 7em;
   }
 .map {
     height: 100vh;
@@ -94,10 +101,35 @@ p {
 button {
     margin-left: 1.5em;
     margin-right: 1.5em;
-    padding-left: 1em;
-    padding-right: 1em;
-    padding-top: 0.2em;
-    padding-bottom: 0.2em;
+    padding: 0.5em 1em;
     font-size: 14px;
     display: block;
+}
+
+.logOutBtn {
+    float: right;
+    margin-top: 2em;
+    margin-right: 25em;
+}
+
+input {
+    display: block;
+    margin-top: 0.5em;
+    padding: 0.5em 1em;
+    font-size: 14.8px;
+}
+
+.logInBtn {
+    margin-top: 1em;
+    margin-left: 0em;
+    padding: 0.5em 1em;
+    font-size: 15px;
+}
+
+.returnBtn {
+    margin-top: 1em;
+    margin-left: 0em;
+    padding: 0.5em 1em;
+    font-size: 14px;
+    margin-bottom: 1rem;
 }
