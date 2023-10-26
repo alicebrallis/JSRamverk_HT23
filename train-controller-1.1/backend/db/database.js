@@ -22,6 +22,7 @@ module.exports = database;
 
 const mongo = require("mongodb").MongoClient;
 const collectionName = "tickets"; //ändrade från keys till tickets
+const collectionNameUsers = "users"; //ändrade från keys till tickets
 
 
 const database = {
@@ -40,34 +41,17 @@ const database = {
             //useUnifiedTopology: true,
         //});
         const db = await client.db();
-        const collection = await db.collection(collectionName);
+        const collection = await db.collection(collectionName);//Här hämtar vi från collection tickets
+        const users = await db.collection(collectionNameUsers); //Här hämtar vi från collection users
 
         return {
             db: db,
             collection: collection,
+            users: users,
             client: client,
         };
-    },
-    
-/*     resetCollection: async function resetCollection() {
-        const { db, client, collection } = await database.openDb();
         
-        try {
-            const collections = await db.listCollections().toArray();
-            const collectionNames = collections.map(col => col.name);
-            
-            if (collectionNames.includes(collectionName)) {
-                await collection.deleteMany({});
-                console.log(`Collection '${collectionName}' reset successfully.`);
-            } else {
-                console.log(`Collection '${collectionName}' does not exist.`);
-            }
-        } catch (error) {
-            console.error(`Error resetting collection '${collectionName}': ${error}`);
-        } finally {
-            await client.close();
-        }
-    } */
+    }
     
 }
 
