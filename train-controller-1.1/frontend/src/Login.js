@@ -22,7 +22,7 @@ function Login({ setAuthenticated }) {
           if (data.message === "Inloggningen lyckades") {
             console.log("Inloggningen lyckades");
             setAuthenticated(true); 
-            navigate('/main')
+            navigate('main')
           } else {
             console.error("Fel vid inloggning");
           }
