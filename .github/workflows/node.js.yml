@@ -38,9 +38,9 @@ jobs:
       working-directory: train-controller-1.1/backend
       run: npm install
 
-    - name: Install Sinon
+    - name: Install Sinon and proxyquire
       working-directory: train-controller-1.1/backend
-      run: npm install sinon --save-dev
+      run: npm install sinon proxyquire --save-dev
 
     - name: Install Mocha globally
       run: npm install -g mocha
