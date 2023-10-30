@@ -42,13 +42,13 @@ function MainView() {
 
   let map;
 
+//DETTA ÄR VÅR LOGGA UT KOMPONENT
   const handleLogout = () => {
     localStorage.removeItem('token');
     setAuthenticated(false);
     navigate('/login')
 
   };
-
 
   //DENNA HANTERAR OM ETT TÅG BLIR KLICKAT PÅ, KNAPPEN CLICK MARKER, OCH VISAR KOORDINATERNA FÖR DETTA TÅG PÅ KARTAN
   const handleTrainClick = (train) => {
@@ -115,21 +115,15 @@ function MainView() {
     }
 };
 
-
-
   useEffect(() => { //NU använder vi en useeffect() för kartan och markörerna, inte varsin för båda som innan
     const container = L.DomUtil.get("map");
     //mapInitializedRef.current = mapInitialized;
 
-    //console.log(mapInitialized)
-  
     if (mapInitialized != null) {
-      //console.log("va")
       mapInitializedRef.current = mapInitialized
     }
   
     if (!mapInitializedRef.current || mapInitializedRef.current) { //Här kollar vi ifall !!mapInitialized är inte satt i så fall: false. Då ritas kartan ut. 
-      //console.log("varför går den inte in")
       if (container != null) {
         container._leaflet_id = null;
         map = L.map('map').setView([62.173276, 14.942265], 5);
@@ -142,12 +136,8 @@ function MainView() {
        //mapInitializedRef.current = true;
       }
     } else { //Här kollar vi ifall mapInitialized är satt i så fall: true och då sätter vi den till false igen så att kartvyn ritas.
-      //console.log("heeeeej") 
       mapInitializedRef.current = mapInitialized;
     }
-
-    //console.log(typeof(mapInitializedRef.current), " mapInitializedRef.current ")
-
 
     // Här ritar vi ut våra kartmarkörer
         const markers = {};
@@ -159,14 +149,12 @@ function MainView() {
           iconUrl: blueMarkerIcon // Vägen till din anpassade blå ikon
         });
 
-        //const delayedTrainsData = [];
-
         // Utför Fetch-anropet för att hämta data.
         fetch("http://localhost:1337/delayed", { mode: 'cors' })
         .then((response) => response.json())
         .then((fetchedData) => {
           // Extrahera och sortera kolumnen "AdvertisedTrainIdent" från datan.
-          const advertisedTrainIdents = fetchedData.data //.map((item) => item.AdvertisedTrainIdent);
+          const advertisedTrainIdents = fetchedData.data
 
           socket.on("message", (data) => {
             const operationalTrainNumbers = advertisedTrainIdents.map(item => item.OperationalTrainNumber);
@@ -186,29 +174,21 @@ function MainView() {
                         if (trainNumber !== data.trainnumber) {
                           let marker = markers[trainNumber];
                           map.removeLayer(marker);
-                          //console.log("Removed marker:", marker);
                           delete markers[trainNumber];
                         }
                       }
                       // Uppdatera eller lägg till markören som matchar
                       let marker = markers[data.trainnumber];
                       if (!marker) {
-                        console.log(map, "map")
                         marker = L.marker(data.position, { icon: blueIcon }).bindPopup(data.trainnumber).addTo(map);
                         marker.on('click', () => handleMarkerClick(data, advertisedTrainIdents));
-                        //console.log(data, "data")
                         markers[data.trainnumber] = marker;
                       } else {
                         marker.setLatLng(data.position);
                       }
-    
-                      //console.log(data.position, "data.position");
                     }
                   } else {
-                    //console.log(mapInitializedRef.current)
                     if (mapInitializedRef.current === null ) {
-                      //console.log("tjenare")
-            
                       if (markers.hasOwnProperty(data.trainnumber)) {
                           let marker = markers[data.trainnumber];
                           marker.setLatLng(data.position);
@@ -216,7 +196,6 @@ function MainView() {
                           
                           let marker = L.marker(data.position, { icon: blueIcon }).bindPopup(data.trainnumber).addTo(map);
                           marker.on('click', () => handleMarkerClick(data, advertisedTrainIdents));
-                          //console.log(data, "data")
                           markers[data.trainnumber] = marker;
                           }
                         }
@@ -230,8 +209,6 @@ function MainView() {
               
           },[mapInitialized, map]);
         
-            
-  
     //handleReturn triggas när vi klickar på tillbaka knappen i delayed vyn och då ska den återskapa vyn för listan över tågförseningarna och kartvyn
     const handleReturn = () => {
       setTicketView(true);
@@ -239,14 +216,23 @@ function MainView() {
       setSelectedTrainClickCount(0);
       setSelectedTrain(null);
       setSelectedTrainMark(null);
-      //console.log(selectedTrain)
       mapInitializedRef.current = null;
       setMapInitialized(train.position); //Satte den till train för att återställa setMap så den ritar ut alla markörer igen
+    };
+
+//handleReturnFromMarker triggas ifrån när en markör har klickats på och användaren vill gå tillbaka till vyn av alla försenade tåg
+    const handleReturnFromMarker = () => {
+      setTicketView(true);
+      setShowDelayedTrains(true);
+      setSelectedTrainClickCount(0);
+      setSelectedTrain(null);
+      setSelectedTrainMark(null);
+      mapInitializedRef.current = null;
+      setMapInitialized(null); //Satte den till train för att återställa setMap så den ritar ut alla markörer igen
     };
     
   //DATA HÄMTNING SKER HÄR
   useEffect(() => {
-    //initializeMap();
     // Fetchar från alla HTTP förfrågningar
     Promise.all([ //använder promise.all för att pararellt köra flera asykrona förfrågningar samtidigt och vänta på att 
     // alla ska slutföras innan vi går vidare. Inuti Promise.all passerar vi en array av promises(det är vad fetch returnerar)
@@ -266,13 +252,10 @@ function MainView() {
       .then(([delayedResult, ticketsResult, codesResult]) => { //den sista .then blocket tar en array  som innehåller resultatet av de 3 förfrågningarna konverterade till JSON.
         setDelayedTrains({ data: delayedResult.data }); //Här uppdaterar vi state variabeln setdelayedTrains med försenad tågtrafik data. 
 
-        //console.log(codesResult, "codesResult")
-
         const lastIdFromData = ticketsResult.data[1] ? ticketsResult.data[1]._id : 0; //new ticket id blir inte riktigt rätt här
 
         setLastId(lastIdFromData); //Sätter last id här, så att det inte kan dupliceras och är unikt för ärendet
 
-        //console.log(ticketsResult.data[1])
 
         const newId = lastIdFromData + 1; //Detta funkar inte för vi har inte rätt "typ" av id, vi har  #65153a8a87dea25ab368eff2 som id,, går inte att lägga till +1
         //console.log(lastId, "lastId")
@@ -306,7 +289,6 @@ function MainView() {
   // DETTA ÄR VYN MED TABELLEN PÅ FÖRSENADE TÅG, STARTVYN
   //
   const renderDelayedTable = (data, selectedTrains) => {
-    //console.log(data, "render")
     const delayedTrains = filterDelayedTrains(data);
     
 
@@ -366,7 +348,7 @@ const componentsInOrder = orderOfKeys.map((key) => { //Här går vi igenom alla 
       return (
         <>
           <TicketButton label="ÄRENDE" onClick={() => handleTicketClick(selectedTrainMark)} />
-          <TicketButton label="TILLBAKA" onClick={() => handleReturn()} />
+          <TicketButton label="TILLBAKA" onClick={() => handleReturnFromMarker()} />
         </>
       );
     }
@@ -472,10 +454,9 @@ const filterDelayedTrains = (data) => {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log(result.data, "result")
+
           const newTicketData = result.data
           setTicketList([...ticketList, newTicketData]);
-          //setTicketList([...ticketList, newTicketData]); //Här skapas ett nytt ärende omvandlat till JSON-data
         });   
     };
 
