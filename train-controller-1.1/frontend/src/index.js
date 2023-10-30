@@ -18,7 +18,7 @@ function App() {
         {authenticated ? (
           <Route path="*" element={<Main />} />
         ) : (
-          <Route path="*" element={<Link to="/login" />} /> //Ändrade här till Link istället för Navigate to för att göra länken relativ istället för absolut och då fungerar driftsättningen för frontend
+          <Route path="*" element={<Link to="/login" />} /> ///Ändrade här till Link istället för Navigate to för att göra länken relativ istället för absolut och då fungerar driftsättningen för frontend
         )}
       </Routes>
     </BrowserRouter>
