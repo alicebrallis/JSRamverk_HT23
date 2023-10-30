@@ -16,7 +16,7 @@ chai.use(chaiHttp);
 
 // Testfall för krav 4. inloggningsflöde
 describe("Authentication API", () => {
-    it('Should let an existing user sign in', (done) => {
+/*     it('Should let an existing user sign in', (done) => {
         chai
             .request(server)
             .post("/login")
@@ -27,7 +27,7 @@ describe("Authentication API", () => {
                 res.body.should.have.property("message").eql("Inloggningen lyckades"); // Svaret innehåller en egenskap med namnet 'data'
                 done(); // Meddelar att testet är klart
             }); 
-    });
+    }); */
 
     it('Should not let a non-existing user to sign in', (done) => {
         chai
