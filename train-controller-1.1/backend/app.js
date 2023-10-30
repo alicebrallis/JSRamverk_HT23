@@ -21,7 +21,7 @@ const database = require("./db/database.js")
 
 const app = express();
 const httpServer = require("http").createServer(app);
-const db =  require('./db/database.js');
+//const db =  require('./db/database.js');
 
 //const jwt = require("jsonwebtoken");
 const { error } = require('console');
