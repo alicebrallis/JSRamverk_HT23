@@ -4,7 +4,7 @@ import './index.css';
 import Main from './Main.js';
 import Login from './Login.js';
 import reportWebVitals from './reportWebVitals.js';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 
 
 function App() {
@@ -13,11 +13,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+      <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/login" element={<Login setAuthenticated={setAuthenticated} />} />
         {authenticated ? (
           <Route path="*" element={<Main />} />
         ) : (
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="*" element={<Link to="/login" />} /> //Ändrade här till Link istället för Navigate to för att göra länken relativ istället för absolut och då fungerar driftsättningen för frontend
         )}
       </Routes>
     </BrowserRouter>
