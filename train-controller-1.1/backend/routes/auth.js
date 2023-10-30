@@ -1,10 +1,15 @@
+/* eslint-disable no-undef */
 const express = require('express');
 const router = express.Router();
 const auth = require("../models/auth.js");
 
 // GET-routeför inloggning
+
+
+
 router.get('/login', async (req, res) => {
     const user = await auth.getUser(req, res);
+    console.log(res, "RES HÄR")
   
     if (user) {
         res.json({ user });
